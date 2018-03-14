@@ -6,11 +6,11 @@ var
 	net = require('net'),
 	fs = require('fs');
 
-var portMap = {
-	5009: 5010,
-	9100: 9101,
-	9300: 9301
-};
+// var portMap = {
+// 	5009: 5010,
+// 	9100: 9101,
+// 	9300: 9301
+// };
 
 var config = {
 	appName: process.env.APP_NAME || "MATLAB_1694",
@@ -19,37 +19,37 @@ var config = {
 	password: process.env.PASSWORD
 };
 
-Object.keys(portMap).forEach(function(port) {
-	net.createServer(function(socket) {
-		var beforeConnectedBuffer = "";
-		var connected = false;
-		var connection = net.createConnection(port);
-		socket.on('close', function() {
-			connection.destroy();
-		});
-		socket.on('error', function(err) {
-			console.error(err);
-		});
-		socket.on('data', function(data) {
-			if (connected) {
-				connection.write(data);
-			} else {
-				beforeConnectedBuffer += data.toString();
-			}
-		});
-		connection.on('connect', function() {
-			connected = true;
-			connection.write(beforeConnectedBuffer);
-		});
-		connection.on('error', function(err) {
-			console.error(err);
-			connection.unpipe(socket);
-			connection.destroy();
-			socket.end();
-		});
-		connection.pipe(socket);
-	}).listen(portMap[port]);
-});
+// Object.keys(portMap).forEach(function(port) {
+// 	net.createServer(function(socket) {
+// 		var beforeConnectedBuffer = "";
+// 		var connected = false;
+// 		var connection = net.createConnection(port);
+// 		socket.on('close', function() {
+// 			connection.destroy();
+// 		});
+// 		socket.on('error', function(err) {
+// 			console.error(err);
+// 		});
+// 		socket.on('data', function(data) {
+// 			if (connected) {
+// 				connection.write(data);
+// 			} else {
+// 				beforeConnectedBuffer += data.toString();
+// 			}
+// 		});
+// 		connection.on('connect', function() {
+// 			connected = true;
+// 			connection.write(beforeConnectedBuffer);
+// 		});
+// 		connection.on('error', function(err) {
+// 			console.error(err);
+// 			connection.unpipe(socket);
+// 			connection.destroy();
+// 			socket.end();
+// 		});
+// 		connection.pipe(socket);
+// 	}).listen(portMap[port]);
+// });
 
 /*
 We need to connect IQFeed to servers by passing 'connect' command to it.
